@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: food-menu-service
+  labels:
+    app: food-menu-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: food-menu-service
+  template:
+    metadata:
+      labels:
+        app: food-menu-service
+    spec:
+      containers:
+        - name: food-menu-service
+          image: food-menu-service
+          ports:
+            - containerPort: 8081
+          imagePullPolicy: IfNotPresent
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: food-menu-service
+spec:
+  selector:
+    app: food-menu-service
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
+      nodePort: 30081

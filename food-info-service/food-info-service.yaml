@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: food-info-service
+  labels:
+    app: food-info-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: food-info-service
+  template:
+    metadata:
+      labels:
+        app: food-info-service
+    spec:
+      containers:
+        - name: food-info-service
+          image: food-info-service
+          ports:
+            - containerPort: 8082
+          imagePullPolicy: IfNotPresent
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: food-info-service
+spec:
+  selector:
+    app: food-info-service
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8082
+      targetPort: 8082
+      nodePort: 30082

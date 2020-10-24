@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: food-rating-service
+  labels:
+    app: food-rating-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: food-rating-service
+  template:
+    metadata:
+      labels:
+        app: food-rating-service
+    spec:
+      containers:
+        - name: food-rating-service
+          image: food-rating-service
+          ports:
+            - containerPort: 8083
+          imagePullPolicy: IfNotPresent
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: food-rating-service
+spec:
+  selector:
+    app: food-rating-service
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8083
+      targetPort: 8083
+      nodePort: 30083
